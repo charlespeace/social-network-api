@@ -33,5 +33,21 @@ const userController = {
             res.status(500).json(err)
         })
     },
+    updateUser(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body },
+            { runvalidators: true, new: true}
+        )
+        .then((dbData) => {
+            if (!dbData) {
+                return res.status(404).json
+            }
+            res.json(dbData)
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+    },
 }
 module.exports = userController
