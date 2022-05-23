@@ -49,5 +49,20 @@ const userController = {
             res.status(500).json(err)
         })
     },
+    deleteUser(req, res) {
+        User.findOneAndDelete({ _id: req.paramas.userId })
+        .then((dbData) => {
+            if(!dbData) {
+                return res.status(404)
+            }
+            return Thought.deleteMany({ _id: { $in: dbData.thoughts } })
+        })
+        .then(() => {
+            res.json({ message: 'User and thoughts deleted' })
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+    }
 }
 module.exports = userController

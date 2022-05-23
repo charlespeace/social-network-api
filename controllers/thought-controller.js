@@ -58,6 +58,28 @@ const thoughtController = {
             res.status(500).json(err)
         })
     },
+    deleteThought(req, res) {
+        Thought.findOneAndRemove({ _id: req.params.thoughtId })
+        .then((dbData) => {
+            if (!dbData) {
+                return res.status(404)
+            }
+            return User.findOneAndUpdate(
+                { thoughts: req.params.thoughtId },
+                { $pull: { thoughts: req.params.thoughtId }},
+                { new: true }
+            )
+        })
+        .then((dbData) => {
+            if(!dbData) {
+                return res.status(404)
+            }
+            res.json({ message: 'Thought deleted!'})
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+    }
 }
 
 module.exports = thoughtController
