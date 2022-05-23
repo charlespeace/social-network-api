@@ -23,6 +23,25 @@ const thoughtController = {
             res.status(500).json(err)
         })
     },
+    createThought(req, res) {
+        Thought.create(req.body)
+        .then((dbData) => {
+            return User.findOneAndUpdate(
+                { _id: req.body.userId },
+                { $push: { thoughts: dbData._id }},
+                { new: true }
+            )
+        })
+        .then((dbData) => {
+        if (!dbData) {
+            return res.status(404).json
+        }
+        res.json({ message: 'Though created!' })
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+    },
 }
 
 module.exports = thoughtController
