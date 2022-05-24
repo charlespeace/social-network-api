@@ -55,7 +55,7 @@ const userController = {
             if(!dbData) {
                 return res.status(404)
             }
-            return Thought.deleteMany({ _id: { $in: dbData.thoughts } })
+            return Thought.deleteMany({ _id: { $in: dbData.thoughts }})
         })
         .then(() => {
             res.status(400).json({ message: 'User and thoughts deleted' })
@@ -63,6 +63,39 @@ const userController = {
         .catch((err) => {
             res.status(500).json(err)
         })
+    },
+    addFriend(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $addToSet: { friends: req.params.friendId }},
+            { new: true }
+        )
+        .then((dbData) => {
+            if (!dbData) {
+                return res.status(404).json
+            }
+            res.json(dbData)
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+    },
+    removeFriend(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $pull: { friends: req.params.friendId }},
+            { new: true }
+        )
+        .then((dbData) => {
+            if (!dbData) {
+                return res.status(404).json
+            }
+            res.json(dbData)
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
     }
 }
+
 module.exports = userController
