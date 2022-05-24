@@ -1,4 +1,3 @@
-const res = require('express/lib/response')
 const { Thought, User } = require('../models')
 
 const thoughtController = {
@@ -15,7 +14,7 @@ const thoughtController = {
         Thought.findOne({ _id: req.params.thoughtId })
         .then((dbData) => {
             if(!dbData) {
-                return res.status(404).json({ message: 'No thought found with this ID'})
+                return res.status(404).json({ message: 'No thought found with this ID' })
             }
             res.json(dbData)
         })
@@ -36,7 +35,7 @@ const thoughtController = {
         if (!dbData) {
             return res.status(404).json
         }
-        res.json({ message: 'Though created!' })
+        res.json({ message: 'Thought created!' })
         })
         .catch((err) => {
             res.status(500).json(err)
@@ -74,7 +73,7 @@ const thoughtController = {
             if(!dbData) {
                 return res.status(404)
             }
-            res.json({ message: 'Thought deleted!'})
+            res.json({ message: 'Thought deleted!' })
         })
         .catch((err) => {
             res.status(500).json(err)

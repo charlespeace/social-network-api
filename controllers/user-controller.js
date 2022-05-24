@@ -16,7 +16,7 @@ const userController = {
         .populate('thoughts')
         .then((dbData) => {
             if(!dbData) {
-                return res.status(404).json({ message: 'No user found with this ID'})
+                return res.status(404).json({ message: 'No user found with this ID' })
             }
             res.json(dbData)
         })
@@ -37,7 +37,7 @@ const userController = {
         User.findOneAndUpdate(
             { _id: req.params.userId },
             { $set: req.body },
-            { runvalidators: true, new: true}
+            { runvalidators: true, new: true }
         )
         .then((dbData) => {
             if (!dbData) {
@@ -50,7 +50,7 @@ const userController = {
         })
     },
     deleteUser(req, res) {
-        User.findOneAndDelete({ _id: req.paramas.userId })
+        User.findOneAndDelete({ _id: req.params.userId })
         .then((dbData) => {
             if(!dbData) {
                 return res.status(404)
@@ -58,7 +58,7 @@ const userController = {
             return Thought.deleteMany({ _id: { $in: dbData.thoughts } })
         })
         .then(() => {
-            res.json({ message: 'User and thoughts deleted' })
+            res.status(400).json({ message: 'User and thoughts deleted' })
         })
         .catch((err) => {
             res.status(500).json(err)
